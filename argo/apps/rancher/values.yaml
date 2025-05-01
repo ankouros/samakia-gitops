@@ -1,0 +1,8 @@
+hostname: rancher.samakia.lab
+bootstrapPassword: admin
+ingress:
+  tls:
+    source: secret
+replicas: 1
+privateCA: true
+tls: external

@@ -1,0 +1,5 @@
+# Custom values for keycloak
+persistence:
+  enabled: true
+  storageClass: "nfs-client"
+  size: 5Gi

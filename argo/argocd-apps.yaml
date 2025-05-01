@@ -1,3 +1,4 @@
+# samakia-gitops/argo/argocd-apps.yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -8,7 +9,7 @@ spec:
   source:
     repoURL: git@github.com:ankouros/samakia-gitops.git
     targetRevision: main
-    path: apps
+    path: argo/apps
     directory:
       recurse: true
   destination:

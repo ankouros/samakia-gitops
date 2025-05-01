@@ -1,0 +1,5 @@
+# Custom values for kong
+persistence:
+  enabled: true
+  storageClass: "nfs-client"
+  size: 5Gi

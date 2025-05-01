@@ -1,0 +1,8 @@
+adminUser: admin
+adminPassword: admin
+persistence:
+  enabled: true
+  storageClassName: "nfs-client"
+  accessModes:
+    - ReadWriteOnce
+  size: 5Gi
