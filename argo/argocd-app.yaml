@@ -1,14 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: bootstrap
-  namespace: argo
+  name: samakia-apps
+  namespace: argocd
 spec:
   project: default
   source:
-    repoURL: https://github.com/ankouros/samakia-gitops.git
+    repoURL: git@github.com:ankouros/samakia-gitops.git
     targetRevision: main
     path: apps
+    directory:
+      recurse: true
   destination:
     server: https://kubernetes.default.svc
     namespace: default
