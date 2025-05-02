@@ -1,0 +1,16 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: istio
+  namespace: istio
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`istio.samakia.lab`)
+      kind: Rule
+      services:
+        - name: istio
+          port: 80
+  tls:
+    secretName: samakia-wildcard-tls

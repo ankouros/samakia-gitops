@@ -1,0 +1,16 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: chartmuseum
+  namespace: chartmuseum
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`chartmuseum.samakia.lab`)
+      kind: Rule
+      services:
+        - name: chartmuseum
+          port: 80
+  tls:
+    secretName: samakia-wildcard-tls

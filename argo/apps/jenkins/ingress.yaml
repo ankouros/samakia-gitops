@@ -1,0 +1,16 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: jenkins
+  namespace: jenkins
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`jenkins.samakia.lab`)
+      kind: Rule
+      services:
+        - name: jenkins
+          port: 80
+  tls:
+    secretName: samakia-wildcard-tls

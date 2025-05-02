@@ -1,0 +1,16 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: rancher
+  namespace: rancher
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`rancher.samakia.lab`)
+      kind: Rule
+      services:
+        - name: rancher
+          port: 80
+  tls:
+    secretName: samakia-wildcard-tls

@@ -4,7 +4,6 @@ grafana:
     enabled: true
     storageClassName: "nfs-client"
     size: 5Gi
-
 prometheus:
   prometheusSpec:
     storageSpec:
@@ -15,3 +14,6 @@ prometheus:
           resources:
             requests:
               storage: 10Gi
+service:
+  type: ClusterIP
+  port: 80

@@ -6,3 +6,6 @@ ingress:
 replicas: 1
 privateCA: true
 tls: external
+service:
+  type: ClusterIP
+  port: 80

@@ -1,0 +1,16 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: kiali
+  namespace: kiali
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`kiali.samakia.lab`)
+      kind: Rule
+      services:
+        - name: kiali
+          port: 80
+  tls:
+    secretName: samakia-wildcard-tls

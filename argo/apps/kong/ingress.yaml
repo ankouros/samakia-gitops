@@ -1,0 +1,16 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: kong
+  namespace: kong
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`kong.samakia.lab`)
+      kind: Rule
+      services:
+        - name: kong
+          port: 80
+  tls:
+    secretName: samakia-wildcard-tls

@@ -1,0 +1,16 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: prometheus
+  namespace: prometheus
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`prometheus.samakia.lab`)
+      kind: Rule
+      services:
+        - name: prometheus
+          port: 80
+  tls:
+    secretName: samakia-wildcard-tls
