@@ -1,8 +1,0 @@
-# Custom values for harbor
-persistence:
-  enabled: true
-  storageClass: "nfs-client"
-  size: 5Gi
-service:
-  type: ClusterIP
-  port: 80
