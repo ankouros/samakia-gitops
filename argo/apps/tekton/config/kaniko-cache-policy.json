@@ -1,0 +1,20 @@
+{
+    "cache": {
+      "enabled": true,
+      "gcr": {
+        "project_id": "your-gcr-project-id",  // Replace with your Google Cloud project ID
+        "cache_bucket": "gs://your-bucket-name/kaniko-cache"  // Replace with your Google Cloud Storage bucket for caching
+      },
+      "local": {
+        "cache_dir": "/workspace/cache"  // Local directory for caching (can be used for local builds or if GCR caching is not needed)
+      },
+      "ttl": "24h",  // Cache TTL for build layers, can be adjusted to your needs (e.g., 24h, 48h)
+      "pullIfNoCache": false,  // If true, it will always pull the base image, even if it is cached
+      "push": true  // Whether to push the cache to the specified registry
+    },
+    "context": {
+      "namespace": "tekton-pipelines",  // Kubernetes namespace for Tekton pipelines
+      "name": "kaniko"  // Name of the Kaniko task or pod running the builds
+    }
+  }
+  

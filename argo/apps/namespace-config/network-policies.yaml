@@ -1,0 +1,115 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-egress
+  namespace: samakia
+spec:
+  podSelector: {}
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.96.0.0/12  # Kubernetes internal services range (adjust as needed)
+      ports:
+        - protocol: TCP
+          port: 443
+        - protocol: TCP
+          port: 80
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-from-monitoring
+  namespace: samakia
+spec:
+  podSelector:
+    matchLabels:
+      app: monitoring
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: grafana
+        - podSelector:
+            matchLabels:
+              app: prometheus
+      ports:
+        - protocol: TCP
+          port: 80
+        - protocol: TCP
+          port: 443
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: restrict-ingress-from-other-apps
+  namespace: samakia
+spec:
+  podSelector:
+    matchLabels:
+      app: jenkins  # Adjust to specific app label
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: tekton  # Allow traffic from Tekton pods to Jenkins
+        - podSelector:
+            matchLabels:
+              app: grafana  # Allow traffic from Grafana pods
+      ports:
+        - protocol: TCP
+          port: 8080  # Jenkins web UI port
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-ingress-from-gitlab
+  namespace: samakia
+spec:
+  podSelector:
+    matchLabels:
+      app: gitlab  # Adjust to specific GitLab label
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: jenkins  # Allow traffic from Jenkins to GitLab
+      ports:
+        - protocol: TCP
+          port: 80  # Adjust as per GitLab port
+        - protocol: TCP
+          port: 443  # Adjust as per GitLab port
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: restrict-egress-from-db
+  namespace: samakia
+spec:
+  podSelector:
+    matchLabels:
+      app: database  # Adjust as per your DB pod label (e.g., MySQL, PostgreSQL)
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: monitoring  # Allow outgoing traffic to monitoring services
+      ports:
+        - protocol: TCP
+          port: 80
+        - protocol: TCP
+          port: 443
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+      ports:
+        - protocol: TCP
+          port: 3306  # Adjust for your DB service port (e.g., MySQL)

@@ -1,0 +1,72 @@
+groups:
+  - name: tekton-alerts
+    rules:
+      - alert: TektonPipelineRunFailed
+        expr: |
+          tekton_pipeline_run_status{status="failed"} > 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Tekton PipelineRun {{ $labels.name }} has failed"
+          description: "Tekton PipelineRun {{ $labels.name }} in namespace {{ $labels.namespace }} has failed.\n\nTriggering condition: {{ $value }} failed pipelines in the last 5 minutes."
+      
+      - alert: TektonTaskRunFailed
+        expr: |
+          tekton_task_run_status{status="failed"} > 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Tekton TaskRun {{ $labels.name }} has failed"
+          description: "Tekton TaskRun {{ $labels.name }} in namespace {{ $labels.namespace }} has failed.\n\nTriggering condition: {{ $value }} failed task runs in the last 5 minutes."
+      
+      - alert: TektonPipelineRunPending
+        expr: |
+          tekton_pipeline_run_status{status="pending"} > 0
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Tekton PipelineRun {{ $labels.name }} is pending"
+          description: "Tekton PipelineRun {{ $labels.name }} in namespace {{ $labels.namespace }} is still pending for more than 10 minutes.\n\nTriggering condition: {{ $value }} pending pipelines in the last 10 minutes."
+      
+      - alert: TektonPipelineRunTimeout
+        expr: |
+          tekton_pipeline_run_duration_seconds{status="running"} > 1800
+        for: 10m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Tekton PipelineRun {{ $labels.name }} has been running for too long"
+          description: "Tekton PipelineRun {{ $labels.name }} in namespace {{ $labels.namespace }} has been running for over 30 minutes.\n\nTriggering condition: Pipeline has been running for more than 30 minutes."
+      
+      - alert: TektonPipelineRunSucceeded
+        expr: |
+          tekton_pipeline_run_status{status="succeeded"} == 0
+        for: 5m
+        labels:
+          severity: info
+        annotations:
+          summary: "Tekton PipelineRun {{ $labels.name }} has no successful runs"
+          description: "Tekton PipelineRun {{ $labels.name }} in namespace {{ $labels.namespace }} has not run successfully in the last 5 minutes.\n\nTriggering condition: No successful pipeline runs in the last 5 minutes."
+      
+      - alert: TektonTaskRunPending
+        expr: |
+          tekton_task_run_status{status="pending"} > 0
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Tekton TaskRun {{ $labels.name }} is pending"
+          description: "Tekton TaskRun {{ $labels.name }} in namespace {{ $labels.namespace }} is still pending for more than 10 minutes.\n\nTriggering condition: {{ $value }} pending task runs in the last 10 minutes."
+      
+      - alert: TektonTaskRunTimeout
+        expr: |
+          tekton_task_run_duration_seconds{status="running"} > 1800
+        for: 10m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Tekton TaskRun {{ $labels.name }} has been running for too long"
+          description: "Tekton TaskRun {{ $labels.name }} in namespace {{ $labels.namespace }} has been running for over 30 minutes.\n\nTriggering condition: Task has been running for more than 30 minutes."

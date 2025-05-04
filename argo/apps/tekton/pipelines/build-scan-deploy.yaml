@@ -1,0 +1,57 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: build-scan-deploy
+spec:
+  workspaces:
+    - name: source
+    - name: docker-config
+    - name: manifests
+
+  params:
+    - name: image
+      type: string
+    - name: application
+      type: string
+
+  tasks:
+    - name: build
+      taskRef:
+        name: build-and-push-cached
+      workspaces:
+        - name: source
+          workspace: source
+        - name: docker-config
+          workspace: docker-config
+      params:
+        - name: image
+          value: "$(params.image)"
+        - name: cache-repo
+          value: "$(params.image)-cache"
+
+    - name: scan
+      taskRef:
+        name: vulnerability-scan
+      runAfter: ["build"]
+      params:
+        - name: image
+          value: "$(params.image)"
+        - name: severity
+          value: "CRITICAL"
+
+    - name: update-argocd
+      taskRef:
+        name: argocd-update-image
+      runAfter: ["scan"]
+      when:
+        - input: "$(tasks.scan.results.VULN-COUNT)"
+          operator: in
+          values: ["0"]
+      workspaces:
+        - name: manifest-dir
+          workspace: manifests
+      params:
+        - name: application
+          value: "$(params.application)"
+        - name: image
+          value: "$(params.image)"
