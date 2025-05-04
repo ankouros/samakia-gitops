@@ -20,9 +20,53 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-
 ---
-
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argo-rollouts
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: git@github.com:ankouros/samakia-gitops.git
+    targetRevision: main
+    path: argo/apps/argo-rollouts
+    helm:
+      releaseName: argo-rollouts
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: samakia
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gitlab
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: git@github.com:ankouros/samakia-gitops.git
+    targetRevision: main
+    path: argo/apps/gitlab
+    helm:
+      releaseName: gitlab
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: samakia
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -34,6 +78,8 @@ spec:
     repoURL: git@github.com:ankouros/samakia-gitops.git
     targetRevision: main
     path: argo/apps/grafana
+    helm:
+      releaseName: grafana
   destination:
     server: https://kubernetes.default.svc
     namespace: samakia
@@ -43,9 +89,7 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-
 ---
-
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -57,6 +101,8 @@ spec:
     repoURL: git@github.com:ankouros/samakia-gitops.git
     targetRevision: main
     path: argo/apps/jenkins
+    helm:
+      releaseName: jenkins
   destination:
     server: https://kubernetes.default.svc
     namespace: samakia
@@ -66,9 +112,7 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-
 ---
-
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -80,6 +124,8 @@ spec:
     repoURL: git@github.com:ankouros/samakia-gitops.git
     targetRevision: main
     path: argo/apps/minio
+    helm:
+      releaseName: minio
   destination:
     server: https://kubernetes.default.svc
     namespace: samakia
@@ -89,32 +135,7 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-
 ---
-
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: tekton
-  namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: git@github.com:ankouros/samakia-gitops.git
-    targetRevision: main
-    path: argo/apps/tekton
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: samakia
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
-
----
-
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -126,6 +147,31 @@ spec:
     repoURL: git@github.com:ankouros/samakia-gitops.git
     targetRevision: main
     path: argo/apps/monitoring
+    directory:
+      recurse: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: samakia
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tekton
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: git@github.com:ankouros/samakia-gitops.git
+    targetRevision: main
+    path: argo/apps/tekton
+    helm:
+      releaseName: tekton
   destination:
     server: https://kubernetes.default.svc
     namespace: samakia
