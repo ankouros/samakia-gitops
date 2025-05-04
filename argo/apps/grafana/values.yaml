@@ -1,0 +1,44 @@
+# values.yaml - Grafana custom configuration
+
+adminPassword: admin  # Set a custom admin password
+
+ingress:
+  enabled: true
+  hosts:
+    - grafana.samakia.lab  # Set the Grafana hostname for external access
+  tls:
+    - hosts:
+        - grafana.samakia.lab  # Ensure it's secured with TLS
+      secretName: samakia-tls  # Name of the TLS secret
+
+service:
+  type: ClusterIP  # The service type can be changed to LoadBalancer if needed
+
+persistence:
+  enabled: true
+  size: 10Gi  # Persistent storage for Grafana
+
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "250m"
+  limits:
+    memory: "1Gi"
+    cpu: "500m"
+
+sidecar:
+  enabled: true
+  annotations: {}  # Optional, for sidecar container settings if needed
+
+# Other optional customizations (e.g., dashboards, datasources)
+dashboards:
+  default:
+    enabled: true
+    datasource: "prometheus"
+    # Add more dashboards as required
+
+datasources:
+  default:
+    type: prometheus
+    url: "http://prometheus-server"
+    access: proxy
