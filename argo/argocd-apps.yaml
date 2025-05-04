@@ -1,20 +1,54 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: samakia-apps
+  name: jenkins-app
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: git@github.com:ankouros/samakia-gitops.git
     targetRevision: main
-    path: argo/apps
-    directory:
-      recurse: true
+    path: argo/apps/jenkins
+    helm:
+      releaseName: jenkins
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: samakia
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: minio-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: git@github.com:ankouros/samakia-gitops.git
+    targetRevision: main
+    path: argo/apps/minio
+    helm:
+      releaseName: minio
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: samakia
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: minio
+      namespace: samakia
+    - apiVersion: networking.k8s.io/v1
+      kind: Ingress
+      name: minio
+      namespace: samakia

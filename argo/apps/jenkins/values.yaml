@@ -1,0 +1,89 @@
+controller:
+  # Basic Configuration
+  componentName: "jenkins-controller"
+  numExecutors: 4
+  executorMode: "NORMAL"
+  
+  # Resource Configuration
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "1Gi"
+    limits:
+      cpu: "2"
+      memory: "4Gi"
+  
+  # Security Configuration
+  containerSecurityContext:
+    runAsNonRoot: true
+    readOnlyRootFilesystem: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+  
+  # Network Configuration
+  servicePort: 8080
+  serviceType: ClusterIP
+  
+  # Health Checks
+  livenessProbe:
+    httpGet:
+      path: "/login"
+      port: 8080
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+  readinessProbe:
+    httpGet:
+      path: "/login"
+      port: 8080
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+  
+  # Persistence
+  persistence:
+    enabled: true
+    size: 8Gi
+    accessMode: ReadWriteOnce
+    existingClaim: ""
+  
+  # Ingress Configuration
+  ingress:
+    enabled: true
+    hostName: "jenkins.samakia.lab"
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"  # If using cert-manager
+    tls:
+    - hosts:
+      - "jenkins.samakia.lab"
+      secretName: "jenkins-tls"
+  
+  # Plugins
+  installPlugins:
+    - kubernetes:1.30.1
+    - workflow-aggregator:2.6
+    - configuration-as-code:1.55
+    - git:4.11.3
+  
+  # RBAC Configuration
+  serviceAccount:
+    create: true
+    name: "jenkins"
+    annotations: {}
+  
+  # Network Policy
+  networkPolicy:
+    enabled: true
+    apiVersion: networking.k8s.io/v1
+    ingress:
+      from:
+      - namespaceSelector:
+          matchLabels:
+            role: monitoring
+      ports:
+      - port: 8080
+        protocol: TCP

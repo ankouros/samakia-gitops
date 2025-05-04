@@ -1,4 +1,8 @@
 apiVersion: v2
 name: jenkins
-description: A Helm chart for Kubernetes
-version: 0.1.0
+description: Jenkins Helm chart
+version: 1.0.0
+dependencies:
+  - name: jenkins
+    version: 4.3.0  # Latest stable version
+    repository: https://charts.jenkins.io
