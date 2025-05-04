@@ -1,0 +1,21 @@
+global:
+  hosts:
+    domain: samakia.lab
+  ingress:
+    configureCertmanager: true
+  minio:
+    enabled: false  # Disable since you have standalone MinIO
+
+certmanager:
+  install: false  # You already have cert-manager
+
+gitlab:
+  gitlab-exporter:
+    enabled: true
+  gitlab-runner:
+    install: true
+    rbac:
+      create: true
+
+nginx-ingress:
+  enabled: false  # Disable since you have ingress-nginx

@@ -1,0 +1,8 @@
+apiVersion: v2
+name: gitlab
+description: GitLab Helm chart
+version: 1.0.0
+dependencies:
+  - name: gitlab
+    version: 6.9.2  # Check latest at https://charts.gitlab.io
+    repository: https://charts.gitlab.io/
