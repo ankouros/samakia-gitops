@@ -1,8 +1,8 @@
 apiVersion: v2
 name: minio
-description: MinIO Object Storage
+description: MinIO Helm Chart
 version: 1.0.0
 dependencies:
   - name: minio
-    version: 4.0.15  # Latest stable version
+    version: 4.0.15
     repository: https://charts.min.io/

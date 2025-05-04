@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jenkins
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/ankouros/samakia-gitops.git
+    targetRevision: main
+    path: argo/apps/jenkins
+    helm:
+      releaseName: jenkins
+      valuesObject:
+        controller:
+          resources:
+            limits:
+              cpu: "1"
+              memory: "2Gi"
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+          ingress:
+            enabled: true
+            hostName: "jenkins.samakia.lab"
+            annotations:
+              nginx.ingress.kubernetes.io/ssl-redirect: "true"
+            tls:
+            - hosts:
+              - "jenkins.samakia.lab"
+              secretName: "jenkins-tls"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: samakia
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: jenkins
+      namespace: samakia
