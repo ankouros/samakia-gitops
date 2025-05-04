@@ -1,0 +1,14 @@
+loki:
+  storage:
+    type: 's3'
+    bucketNames:
+      - "loki-logs"
+    s3:
+      endpoint: "minio.samakia.lab"
+      secretAccessKey: "minio123"
+      accessKeyId: "minio"
+
+promtail:
+  config:
+    clients:
+      - url: http://loki:3100/loki/api/v1/push

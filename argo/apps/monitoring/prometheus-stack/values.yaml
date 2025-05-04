@@ -1,0 +1,26 @@
+grafana:
+  enabled: true
+  ingress:
+    enabled: true
+    hosts:
+      - grafana.samakia.lab
+    tls:
+      - secretName: grafana-tls
+        hosts:
+          - grafana.samakia.lab
+
+prometheus:
+  ingress:
+    enabled: true
+    hosts:
+      - prometheus.samakia.lab
+    tls:
+      - secretName: prometheus-tls
+        hosts:
+          - prometheus.samakia.lab
+
+alertmanager:
+  ingress:
+    enabled: true
+    hosts:
+      - alertmanager.samakia.lab

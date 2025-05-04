@@ -1,0 +1,24 @@
+tekton-pipeline:
+  enabled: true
+  config:
+    artifacts:
+      bucket: "tekton-artifacts"
+      s3:
+        endpoint: "minio.samakia.lab"
+  
+tekton-triggers:
+  enabled: true
+  interceptors:
+    github:
+      secretToken: "github-webhook-secret"
+
+tekton-dashboard:
+  enabled: true
+  ingress:
+    enabled: true
+    hosts:
+      - tekton.samakia.lab
+    tls:
+      - secretName: tekton-tls
+        hosts:
+          - tekton.samakia.lab
