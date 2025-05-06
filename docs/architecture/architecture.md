@@ -1,6 +1,3 @@
-## Samakia Datacenter Architecture
-
-```mermaid
 flowchart LR
   subgraph GitOps & CI/CD
     A[GitHub Actions] -->|Build & Push| B[GHCR Registry]
@@ -10,7 +7,7 @@ flowchart LR
 
   subgraph K8sCluster["Kubernetes Cluster (v1.33.0)"]
     direction TB
-    M[SAMAKIA<br/>(Control Plane)]
+    M["SAMAKIA\n(Control Plane)"]
     subgraph Workers
       W1[ASIA]
       W2[AFRICA]
@@ -20,13 +17,13 @@ flowchart LR
 
     subgraph Networking
       Flannel[CNI: Flannel]
-      MetalLB[MetalLB L2<br/>(192.168.11.200–250)]
+      MetalLB["MetalLB L2\n(192.168.11.200–250)"]
       Flannel --> K8sCluster
       MetalLB --> K8sCluster
     end
 
     subgraph Storage
-      NFS[NFS PVCs<br/>(/mnt/global_storage)]
+      NFS["NFS PVCs\n(/mnt/global_storage)"]
       Longhorn[Longhorn]
       NFS & Longhorn --> K8sCluster
     end
@@ -54,17 +51,14 @@ flowchart LR
     end
 
     subgraph Frontend
-      NextJS[Next.js<br/>(portal.samakia.lab)]
+      NextJS["Next.js\n(portal.samakia.lab)"]
       NextJS -->|Calls APIs| Kong
     end
 
     subgraph Monitoring & Logging
-      Prom[Prometheus<br/>(15s scrape)]
-      Loki[Loki<br/>(14d retention)]
-      Grafana[Grafana<br/>(Dash ID 1337)]
+      Prom["Prometheus\n(15s scrape)"]
+      Loki["Loki\n(14d retention)"]
+      Grafana["Grafana\n(Dashboard 1337)"]
       Prom & Loki --> Grafana
     end
   end
-```
-
-
