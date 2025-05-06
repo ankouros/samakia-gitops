@@ -65,3 +65,6 @@ flowchart LR
       Prom & Loki --> Grafana
     end
   end
+```
+
+

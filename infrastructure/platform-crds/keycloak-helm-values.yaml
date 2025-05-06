@@ -1,0 +1,4 @@
+replicaCount: 1
+keycloak:
+  username: admin
+  password: PAparia!23

@@ -1,0 +1,16 @@
+image:
+  repository: your-registry/portal
+  tag: latest
+service:
+  type: ClusterIP
+  port: 3000
+ingress:
+  enabled: true
+  hosts:
+    - host: portal.samakia.lab
+      paths:
+        - /
+  tls:
+    - secretName: portal-tls
+      hosts:
+        - portal.samakia.lab
