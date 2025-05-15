@@ -8,6 +8,9 @@ flowchart LR
     C -->|Sync| K8sCluster
   end
 
+
+
+
   subgraph K8sCluster["Kubernetes Cluster (v1.33.0)"]
     direction TB
     M["SAMAKIA\n(Control Plane)"]
